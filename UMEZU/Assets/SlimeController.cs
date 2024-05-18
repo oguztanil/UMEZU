@@ -163,10 +163,12 @@ public class SlimeController : MonoBehaviour
         {
             jumpPower += Time.deltaTime * 0.4f;
             jumpPower = Mathf.Min(jumpPower, 1);
-            jumpLocation = (transform.forward * (jumpPower * 3));
+            jumpLocation = (transform.forward * (jumpPower * 2));
+            jumpLocation = transform.position + jumpLocation;
+            Debug.Log("Jump location = " + jumpLocation);
 
             //Send data to trajectory
-            trajectoryPrediction.ShowTrajectory(transform.position, jumpLocation, jumpPower);
+            trajectoryPrediction.ShowTrajectory(jumpLocation, jumpPower);
 
             if (Input.GetMouseButtonUp(0))
             {
@@ -186,10 +188,12 @@ public class SlimeController : MonoBehaviour
             .AppendCallback(() =>
             {
                 currentState = SlimeState.Jumping;
+                trajectoryPrediction.HideTrajectory();
                 anim.SetTrigger("jump");
                 Debug.Log("Jumped");
+
             })
-            .Append(this.transform.DOMove(transform.position + jumpLocation, 1).SetEase(Ease.Linear)
+            .Append(this.transform.DOMove(jumpLocation, 1).SetEase(Ease.Linear)
             .OnComplete(() =>
             {
                 anim.SetTrigger("land");

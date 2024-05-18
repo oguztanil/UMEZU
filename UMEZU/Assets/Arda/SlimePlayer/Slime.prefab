@@ -105,6 +105,54 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &8138509453854567920
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4841334024301360261}
+  - component: {fileID: 8910379609702146787}
+  m_Layer: 0
+  m_Name: TrajectoryPrediction
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4841334024301360261
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8138509453854567920}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2259230839461424930}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8910379609702146787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8138509453854567920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4069d82b1b7bc040938ad71ce24a35d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dotPrefab: {fileID: 2472773490390656031, guid: ef45daabaae2b624c930451c4f3f54a3,
+    type: 3}
+  numberOfDots: 10
+  timeBetweenDots: 0.1
 --- !u!1 &8533656192554980319
 GameObject:
   m_ObjectHideFlags: 0
@@ -392,6 +440,10 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: -1018664272722485354, guid: 3d11614dd95b3ae4cb65ffc64e001c18, type: 3}
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3d11614dd95b3ae4cb65ffc64e001c18,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4841334024301360261}
     - targetCorrespondingSourceObject: {fileID: -5477749408508380018, guid: 3d11614dd95b3ae4cb65ffc64e001c18,
         type: 3}
       insertIndex: -1
@@ -431,6 +483,7 @@ MonoBehaviour:
   moveSpeed: 1
   rotationSpeed: 10
   mouseDown: 0
+  trajectoryPrediction: {fileID: 8910379609702146787}
   currentState: 0
 --- !u!95 &7654793637307657442
 Animator:
@@ -453,6 +506,12 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!4 &2259230839461424930 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3d11614dd95b3ae4cb65ffc64e001c18,
+    type: 3}
+  m_PrefabInstance: {fileID: 1788174277469128905}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3110792072648045639 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -5477749408508380018, guid: 3d11614dd95b3ae4cb65ffc64e001c18,

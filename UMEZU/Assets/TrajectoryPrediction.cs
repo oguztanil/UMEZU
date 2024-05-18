@@ -16,30 +16,51 @@ public class TrajectoryPrediction : MonoBehaviour
         dots = new List<GameObject>();
         for (int i = 0; i < numberOfDots; i++)
         {
-            GameObject dot = Instantiate(dotPrefab);
+            GameObject dot = Instantiate(dotPrefab, transform);
             dot.SetActive(false);
             dots.Add(dot);
         }
     }
 
-    public void ShowTrajectory(Vector3 startPosition, Vector3 landingLocation, float power)
+    public void ShowTrajectory(Vector3 landingLocation, float power)
     {
-        // Calculate the direction from start to landing location
-        Vector3 direction = (landingLocation - startPosition).normalized;
+        Vector3 direction = (landingLocation - transform.position).normalized;
+        float flightDuration = Vector3.Distance(transform.position, landingLocation) / power;
 
-        // Calculate initial velocity for the jump
-        Vector3 velocity = direction * power;
+        float timeInterval = flightDuration / numberOfDots;
 
-        // Calculate gravity
-        Vector3 gravity = Physics.gravity;
-
+        // Instantiate new dots along the trajectory
         for (int i = 0; i < numberOfDots; i++)
         {
-            float time = i * timeBetweenDots;
-            Vector3 position = startPosition + velocity * time + 0.5f * gravity * time * time;
-            dots[i].transform.position = position;
+            float time = i * timeInterval;
+            Vector3 trajectoryPoint = CalculateTrajectoryPoint(transform.position, direction, power, time, flightDuration);
+
+            // Instantiate a dot at the trajectory point
+            dots[i].transform.position = trajectoryPoint;
             dots[i].SetActive(true);
+
+            // Change the color of the dot based on power
+            Color dotColor = CalculateDotColor(power);
+            Renderer dotRenderer = dots[i].GetComponent<Renderer>();
+            dotRenderer.material.color = dotColor;
         }
+    }
+
+    private Vector3 CalculateTrajectoryPoint(Vector3 initialPosition, Vector3 direction, float power, float time, float flightDuration)
+    {
+        float verticalOffset = Mathf.Sin(time * Mathf.PI / flightDuration) * 0.1f; // Adjust the magnitude as needed
+
+        Vector3 horizontalMovement = direction * power * time;
+        Vector3 verticalMovement = Vector3.up * verticalOffset;
+
+        return initialPosition + horizontalMovement + verticalMovement;
+    }
+    private Color CalculateDotColor(float power)
+    {
+        // Assuming power ranges from 0.0f to 1.0f
+        // You can define your own color gradient based on power values
+        // For example, if power is closer to 0, use blue color, and if it's closer to 1, use red color
+        return Color.Lerp(Color.blue, Color.red, power);
     }
 
     public void HideTrajectory()
