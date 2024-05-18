@@ -10,9 +10,10 @@ public class SlimeController : MonoBehaviour
     Animator anim;
     public bool mouseDown;
 
+    [SerializeField] private TrajectoryPrediction trajectoryPrediction;
 
     private Vector3 forward, right;
-    public enum SlimeState { Idle, Moving, Jumping}
+    public enum SlimeState { Idle, Moving, PreparingJump, Jumping}
     public SlimeState currentState;
 
     void Start()
@@ -48,9 +49,11 @@ public class SlimeController : MonoBehaviour
                 Move();
                 HandleInputStartJump();
                 break;
-            case SlimeState.Jumping:
-                //HandleInputStopJump();
+            case SlimeState.PreparingJump:
                 LookAtCursor();
+                break;
+            case SlimeState.Jumping:
+                
                 break;
             default:
                 break;
@@ -132,7 +135,7 @@ public class SlimeController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && !mouseDown)
         {
-            currentState = SlimeState.Jumping;
+            currentState = SlimeState.PreparingJump;
             mouseDown = true;
             anim.SetTrigger("prepJump");
             if (prepareJumpRoutine != null)
@@ -154,16 +157,20 @@ public class SlimeController : MonoBehaviour
 
     IEnumerator PrepareJump()
     {
+        Vector3 jumpLocation = transform.position;
         float jumpPower = 0;
-
         while (mouseDown)
         {
             jumpPower += Time.deltaTime * 0.4f;
             jumpPower = Mathf.Min(jumpPower, 1);
-            Debug.Log($"Jump power {jumpPower}");
+            jumpLocation = (transform.forward * (jumpPower * 3));
+
+            //Send data to trajectory
+            trajectoryPrediction.ShowTrajectory(transform.position, jumpLocation, jumpPower);
+
             if (Input.GetMouseButtonUp(0))
             {
-                DoJump(jumpPower);
+                DoJump(jumpLocation);
                 mouseDown = false;
                 break;
 
@@ -172,16 +179,17 @@ public class SlimeController : MonoBehaviour
         }
     }
 
-    void DoJump(float jumpPower)
+    void DoJump(Vector3 jumpLocation)
     {
         Sequence jumpSequence = DOTween.Sequence();
         jumpSequence
             .AppendCallback(() =>
             {
+                currentState = SlimeState.Jumping;
                 anim.SetTrigger("jump");
                 Debug.Log("Jumped");
             })
-            .Append(this.transform.DOMove(transform.position + (transform.forward * (jumpPower * 3)), 1)
+            .Append(this.transform.DOMove(transform.position + jumpLocation, 1).SetEase(Ease.Linear)
             .OnComplete(() =>
             {
                 anim.SetTrigger("land");
