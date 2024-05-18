@@ -6,15 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="0430a68f-cccc-4657-94e1-e4065d6504d6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.UMEZU/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UMEZU/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Arda/ArdaScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Arda/ArdaScene.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/OToon- URP Toon Shading/Unity_2021_2022_upgrade.unitypackage.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/DOTweenSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/DOTweenSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/SlimeCameraController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/SlimeCameraController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/SlimeController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/SlimeController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.polybrush/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.polybrush/Settings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Oguz/OguzScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Oguz/OguzScene.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.sequences/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.sequences/Settings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,7 +19,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/Oguz/OguzScripts/BasicCharacterController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Oguz/ozController.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
@@ -103,6 +97,7 @@
       <workItem from="1715976592061" duration="2478000" />
       <workItem from="1715988992261" duration="1330000" />
       <workItem from="1715997591457" duration="7334000" />
+      <workItem from="1716027051398" duration="4624000" />
     </task>
     <servers />
   </component>
