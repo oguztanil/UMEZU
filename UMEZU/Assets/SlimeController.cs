@@ -36,7 +36,7 @@ public class SlimeController : MonoBehaviour
     void Move()
     {
         // Get the input directions
-        Vector3 direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        Vector3 direction = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         Vector3 rightMovement = right * direction.x;
         Vector3 upMovement = forward * direction.z;
 
