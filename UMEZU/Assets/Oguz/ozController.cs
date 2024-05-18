@@ -5,15 +5,31 @@ using DG.Tweening;
 
 public class ozController : MonoBehaviour
 {
-    public float moveSpeed = 5f;
+    
     public float rotationSpeed = 10f;
     Animator anim;
     public bool mouseDown;
 
+    private float moveSpeed => Mathf.Clamp(3 / currentSize, 1, 10);
+
     private Vector3 forward, right;
-    public enum SlimeState { Idle, Moving, Jumping }
+    public enum SlimeState { Idle, Moving, PreparingJump, Jumping , colliding}
     public SlimeState currentState;
     private Rigidbody rb;
+
+    [SerializeField] float jumpPrepareSpeed;
+    public float maxSize = 100;
+    public float minSize = 1;
+    [SerializeField] float baseSize = 30;
+    public float currentSize = 30;
+    Vector3 baseScale = Vector3.one;
+
+    [SerializeField] GameObject splashParticlePrefab;
+
+    bool immovable = false;
+
+
+    [SerializeField] TrajectoryPrediction trajectoryPrediction;
 
     void Start()
     {
@@ -43,8 +59,19 @@ public class ozController : MonoBehaviour
         currentState = SlimeState.Idle;
     }
 
+    public void SetImmovable(bool set)
+    {
+        immovable = set;
+    }
+
     void Update()
     {
+        
+        if (immovable)
+        {
+            return;
+        }
+
         switch (currentState)
         {
             case SlimeState.Idle:
@@ -56,8 +83,11 @@ public class ozController : MonoBehaviour
                 Move();
                 HandleInputStartJump();
                 break;
-            case SlimeState.Jumping:
+            case SlimeState.PreparingJump:
                 LookAtCursor();
+
+                break;
+            case SlimeState.Jumping:
                 break;
             default:
                 break;
@@ -96,26 +126,36 @@ public class ozController : MonoBehaviour
         }
     }
 
-    void ScaleUp()
+    public void ScaleUp(float addedSize)
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Vector3 scale;
-            scale = transform.localScale;
-            scale *= 0.1f;
-            transform.DOScale(this.transform.localScale + scale, 0.5f);
-        }
+        currentSize = Mathf.Min(currentSize + addedSize, maxSize);
+        AdjustScale();
+    }
+    public void ScaleDown(float lostSize)
+    {
+        currentSize = Mathf.Max(currentSize - lostSize, minSize);
+        AdjustScale();
     }
 
-    void ScaleDown()
+    void AdjustScale()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        float scaleFactor = currentSize / baseSize;
+        transform.DOScale(baseScale * scaleFactor, .5f);
+        
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+       
+
+        if (other.TryGetComponent<SlimeFragment>(out SlimeFragment slimeFragment))
         {
-            Vector3 scale;
-            scale = transform.localScale;
-            scale *= 0.1f;
-            transform.DOScale(this.transform.localScale - scale, 0.5f);
+            if (slimeFragment.NotUsed())
+            {
+                ConsumeObject(slimeFragment);
+            }
         }
+
     }
 
     void LookAtCursor()
@@ -137,7 +177,6 @@ public class ozController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && !mouseDown)
         {
-            currentState = SlimeState.Jumping;
             mouseDown = true;
             anim.SetTrigger("prepJump");
             if (prepareJumpRoutine != null)
@@ -148,49 +187,132 @@ public class ozController : MonoBehaviour
         }
     }
 
-    void HandleInputStopJump()
-    {
-        if (Input.GetMouseButtonUp(0))
-        {
-            mouseDown = false;
-            currentState = SlimeState.Idle;
-        }
-    }
+
 
     IEnumerator PrepareJump()
     {
+        currentState = SlimeState.PreparingJump;
+        Vector3 jumpLocation = transform.position;
         float jumpPower = 0;
-
         while (mouseDown)
         {
-            jumpPower += Time.deltaTime * 0.4f;
+            jumpPower += Time.deltaTime * jumpPrepareSpeed;
             jumpPower = Mathf.Min(jumpPower, 1);
-            Debug.Log($"Jump power {jumpPower}");
+            jumpLocation = (transform.forward * (jumpPower * 2));
+            jumpLocation = transform.position + jumpLocation;
+            Debug.Log("Jump location = " + jumpLocation);
+
+            //Send data to trajectory
+            trajectoryPrediction.ShowTrajectory(jumpLocation, jumpPower);
+
             if (Input.GetMouseButtonUp(0))
             {
-                DoJump(jumpPower);
+                if (jumpPower < 0.2f)
+                {
+                    currentState = SlimeState.Idle;
+                    anim.Play("idle");
+                    trajectoryPrediction.HideTrajectory();
+                    mouseDown = false;
+                    break;
+                }
+
+                DoJump(jumpLocation);
                 mouseDown = false;
                 break;
+
             }
             yield return null;
         }
     }
 
-    void DoJump(float jumpPower)
+    Sequence jumpSequence;
+
+    void DoJump(Vector3 jumpLocation)
     {
-        Sequence jumpSequence = DOTween.Sequence();
+        jumpSequence = DOTween.Sequence();
+
         jumpSequence
             .AppendCallback(() =>
             {
+                currentState = SlimeState.Jumping;
+                trajectoryPrediction.HideTrajectory();
                 anim.SetTrigger("jump");
                 Debug.Log("Jumped");
+
             })
-            .Append(this.transform.DOMove(transform.position + (transform.forward * (jumpPower * 3)), 1)
+            .Append(this.transform.DOMove(jumpLocation, 1).SetEase(Ease.Linear)
             .OnComplete(() =>
             {
                 anim.SetTrigger("land");
                 Debug.Log("Landed");
                 currentState = SlimeState.Idle;
+                if (splashParticlePrefab != null)
+                {
+                    VfxManager.instance.InstantiateVFX(splashParticlePrefab, transform.position);
+                }
             }));
+
     }
+
+
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Obstacle") && currentState == SlimeState.Jumping)
+        {
+            
+            // Calculate bounce direction
+            Vector3 bounceDirection = (transform.position - collision.contacts[0].point).normalized;
+            Vector3 bounceTarget = transform.position;//new Vector3(-bounceDirection.x, 0, bounceDirection.z);
+
+            // Create a new bounce sequence
+            Sequence bounceSequence = DOTween.Sequence();
+            bounceSequence.AppendCallback(() =>
+            {
+                Debug.Log("Obstacle");
+                jumpSequence.Kill();
+                anim.SetTrigger("collide");
+                currentState = SlimeState.colliding;
+
+                if (splashParticlePrefab != null)
+                {
+                    VfxManager.instance.InstantiateVFX(splashParticlePrefab, transform.position);
+                }
+            })
+             .AppendInterval(0.5f)
+            .AppendCallback(() =>
+            {
+                anim.SetTrigger("collideIdle");
+            })
+            .Append(this.transform.DOMove(bounceTarget, 1).SetEase(Ease.OutQuad))
+            .OnComplete(() =>
+            {
+                currentState = SlimeState.Idle; // Set to appropriate state after bounce
+            
+            });
+        }
+    }
+
+
+
+
+    public void ConsumeObject(SlimeFragment slimeFragment)
+    {
+        Sequence seq = DOTween.Sequence();
+        seq.AppendCallback(() =>
+        {
+            slimeFragment.StartConsuming(this);
+            SetImmovable(true);
+            transform.LookAt(slimeFragment.transform);
+        }).Append(transform.DOMove(new Vector3(slimeFragment.transform.position.x, transform.position.y, slimeFragment.transform.position.z), 1f))
+        .OnComplete(() =>
+        {
+            ScaleUp(slimeFragment.healAmount);
+            slimeFragment.FinishConsuming(this);
+            SetImmovable(false);
+        });
+
+    }
+
+
 }
