@@ -7,6 +7,8 @@ public class SlimeController : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public float rotationSpeed = 10f;  // Speed of rotation
+    Animator anim;
+
 
     private Vector3 forward, right;
 
@@ -20,6 +22,8 @@ public class SlimeController : MonoBehaviour
         right = Camera.main.transform.right;
         right.y = 0;
         right = Vector3.Normalize(right);
+
+        anim = GetComponent<Animator>();
     }
 
     void Update()
@@ -27,7 +31,6 @@ public class SlimeController : MonoBehaviour
         Move();
         ScaleUp();
         ScaleDown();
-        InitiateJump();
     }
 
     void Move()
@@ -43,6 +46,7 @@ public class SlimeController : MonoBehaviour
         // Only move and rotate if there is input
         if (heading != Vector3.zero)
         {
+            anim.SetBool("moving", true);
             // Calculate the target position
             Vector3 targetPosition = transform.position + heading * moveSpeed * Time.deltaTime;
 
@@ -52,6 +56,11 @@ public class SlimeController : MonoBehaviour
             // Rotate the player towards the heading direction
             Quaternion targetRotation = Quaternion.LookRotation(-heading);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        }
+        else
+        {
+            anim.SetBool("moving", false);
+
         }
     }
 
@@ -77,19 +86,6 @@ public class SlimeController : MonoBehaviour
         }
     }
 
-    void InitiateJump()
-    {
-        if (Input.GetMouseButtonDown(0)) // 0 is the left mouse button
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
-            {
-                Vector3 clickPosition = hit.point;
-                Debug.Log("Mouse click position in world space: " + clickPosition);
-            }
-        }
-    }
+    
 
 }
