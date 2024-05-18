@@ -8,9 +8,12 @@ public class SlimeController : MonoBehaviour
     public float moveSpeed = 5f;
     public float rotationSpeed = 10f;  // Speed of rotation
     Animator anim;
+    public bool mouseDown;
 
 
     private Vector3 forward, right;
+    public enum SlimeState { Idle, Moving, Jumping}
+    public SlimeState currentState;
 
     void Start()
     {
@@ -24,13 +27,34 @@ public class SlimeController : MonoBehaviour
         right = Vector3.Normalize(right);
 
         anim = GetComponent<Animator>();
+
+        currentState = SlimeState.Idle;
     }
 
     void Update()
     {
-        Move();
-        ScaleUp();
-        ScaleDown();
+        
+        //ScaleUp();
+        //ScaleDown();
+
+        switch (currentState)
+        {
+            case SlimeState.Idle:
+                Move();
+                HandleInputStartJump();
+                LookAtCursor();
+                break;
+            case SlimeState.Moving:
+                Move();
+                HandleInputStartJump();
+                break;
+            case SlimeState.Jumping:
+                //HandleInputStopJump();
+                LookAtCursor();
+                break;
+            default:
+                break;
+        }
     }
 
     void Move()
@@ -54,13 +78,16 @@ public class SlimeController : MonoBehaviour
             transform.position = targetPosition;
 
             // Rotate the player towards the heading direction
-            Quaternion targetRotation = Quaternion.LookRotation(-heading);
+            Quaternion targetRotation = Quaternion.LookRotation(heading);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+
+            currentState = SlimeState.Moving;
         }
         else
         {
             anim.SetBool("moving", false);
-
+            
+            currentState = SlimeState.Idle;
         }
     }
 
@@ -86,6 +113,83 @@ public class SlimeController : MonoBehaviour
         }
     }
 
-    
+    void LookAtCursor()
+    {
+        // Get mouse position normalized (0 to 1)
+        float mouseX = 1-(Input.mousePosition.x / Screen.width);
+        float mouseY = Input.mousePosition.y / Screen.height;
+
+        // Calculate the angle based on screen position
+        float angle = Mathf.Atan2(mouseY - 0.5f, mouseX - 0.5f) * Mathf.Rad2Deg;
+
+        // Apply the rotation to the character
+        transform.rotation = Quaternion.Euler(0, angle - 45, 0); // Adjust with -45 if character's forward is along the 45-degree axis
+    }
+
+    Coroutine prepareJumpRoutine;
+
+    void HandleInputStartJump()
+    {
+        if (Input.GetMouseButtonDown(0) && !mouseDown)
+        {
+            currentState = SlimeState.Jumping;
+            mouseDown = true;
+            anim.SetTrigger("prepJump");
+            if (prepareJumpRoutine != null)
+            {
+                StopCoroutine(prepareJumpRoutine);
+            }
+            prepareJumpRoutine = StartCoroutine(PrepareJump());
+        }
+    }
+    void HandleInputStopJump()
+    {
+        if (Input.GetMouseButtonUp(0))
+        {
+            mouseDown = false;
+            currentState = SlimeState.Idle;
+            
+        }
+    }
+
+    IEnumerator PrepareJump()
+    {
+        float jumpPower = 0;
+
+        while (mouseDown)
+        {
+            jumpPower += Time.deltaTime * 0.4f;
+            jumpPower = Mathf.Min(jumpPower, 1);
+            Debug.Log($"Jump power {jumpPower}");
+            if (Input.GetMouseButtonUp(0))
+            {
+                DoJump(jumpPower);
+                mouseDown = false;
+                break;
+
+            }
+            yield return null;
+        }
+    }
+
+    void DoJump(float jumpPower)
+    {
+        Sequence jumpSequence = DOTween.Sequence();
+        jumpSequence
+            .AppendCallback(() =>
+            {
+                anim.SetTrigger("jump");
+                Debug.Log("Jumped");
+            })
+            .Append(this.transform.DOMove(transform.position + (transform.forward * (jumpPower * 3)), 1)
+            .OnComplete(() =>
+            {
+                anim.SetTrigger("land");
+                Debug.Log("Landed");
+                currentState = SlimeState.Idle;
+
+            }));
+
+    }
 
 }
