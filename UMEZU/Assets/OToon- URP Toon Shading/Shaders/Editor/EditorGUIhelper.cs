@@ -326,7 +326,7 @@ namespace OToon
             string displayName = property.displayName;
             // Remove everything in square brackets.
             displayName = Regex.Replace(displayName, @" ?\[.*?\]", string.Empty);
-            var tooltip = OtoonToolTip.Tips.ContainsKey(property.name) ? OtoonToolTip.Tips[property.name] : "";
+            var tooltip = OToonToolTip.Tips.ContainsKey(property.name) ? OToonToolTip.Tips[property.name] : "";
             var guiContent = new GUIContent(displayName, tooltip);
 
             if (property.displayName.Contains("[SinglelineTexture]"))

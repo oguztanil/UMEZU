@@ -8,7 +8,7 @@ using OToon;
 using UnityEngine.Rendering.Universal;
 using System.Linq;
 
-public class OtoonShaderGraph : StandardBaseShaderGUI
+public class OToonShaderGraph : StandardBaseShaderGUI
 {
     public enum PatternSampleSpace
     {

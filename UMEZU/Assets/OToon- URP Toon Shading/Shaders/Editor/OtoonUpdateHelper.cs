@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 
-public static class OtoonUpdateHelper
+public static class OToonUpdateHelper
 {
     private const string filePath = "Assets/OToon- URP Toon Shading/Data/GradientSettingsManager.asset";
 
