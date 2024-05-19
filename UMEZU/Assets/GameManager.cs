@@ -11,10 +11,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     private void Awake()
     {
-        if (instance != null && instance != this)
-        {
-            Destroy(this.gameObject);
-        }
+       
         instance = this;
         DontDestroyOnLoad(this.gameObject);
     }
@@ -34,11 +31,12 @@ public class GameManager : MonoBehaviour
     public void LoadNextLevel(string nextLevelName)
     {
         Debug.Log("GameManager got the signal");
+        string levelName = nextLevelName;
         if (loadSceneRoutine != null)
         {
             StopCoroutine(loadSceneRoutine);
         }
-        loadSceneRoutine = StartCoroutine(LoadSceneRoutine(nextLevelName));
+        loadSceneRoutine = StartCoroutine(LoadSceneRoutine(levelName));
         VfxManager.instance.LoadSceneEffect();
 
     }
