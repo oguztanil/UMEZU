@@ -66,6 +66,8 @@ public class ozController : MonoBehaviour
 
     void Update()
     {
+        LoseScalePerSec();
+
         
         if (immovable)
         {
@@ -130,6 +132,7 @@ public class ozController : MonoBehaviour
     {
         currentSize = Mathf.Min(currentSize + addedSize, maxSize);
         AdjustScale();
+
     }
     public void ScaleDown(float lostSize)
     {
@@ -187,7 +190,12 @@ public class ozController : MonoBehaviour
         }
     }
 
-
+    void LoseScalePerSec()
+    {
+        currentSize -= Time.deltaTime * 0.7f;
+        SlimeTimer.instance.SetTimer(currentSize);
+        AdjustScale();
+    }
 
     IEnumerator PrepareJump()
     {

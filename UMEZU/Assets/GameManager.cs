@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     private void Awake()
     {
-        if (instance != null)
+        if (instance != null && instance != this)
         {
             Destroy(this.gameObject);
         }
@@ -19,6 +20,16 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion
+
+    public void StartGame()
+    {
+        Sequence seq = DOTween.Sequence();
+        seq.AppendInterval(2).AppendCallback(() =>
+        {
+            SceneManager.LoadScene("Level1");
+        });
+
+    }
 
     public void LoadNextLevel(string nextLevelName)
     {
