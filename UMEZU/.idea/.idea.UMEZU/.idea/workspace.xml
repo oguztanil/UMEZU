@@ -6,22 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="0430a68f-cccc-4657-94e1-e4065d6504d6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.UMEZU/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UMEZU/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Arda/ArdaScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Arda/ArdaScene.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/EnemySlime.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/EnemySlime.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/OToon- URP Toon Shading/Black.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/OToon- URP Toon Shading/Black.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/OToon- URP Toon Shading/Demo(Can be delete)/Scenes/1 Tutorials/Materials/2Gradient.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/OToon- URP Toon Shading/Demo(Can be delete)/Scenes/1 Tutorials/Materials/2Gradient.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/OToon- URP Toon Shading/Demo(Can be delete)/Scenes/1 Tutorials/Materials/2Tone&amp;Custom Shadow.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/OToon- URP Toon Shading/Demo(Can be delete)/Scenes/1 Tutorials/Materials/2Tone&amp;Custom Shadow.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/OToon- URP Toon Shading/Demo(Can be delete)/Scenes/1 Tutorials/Materials/2Tone.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/OToon- URP Toon Shading/Demo(Can be delete)/Scenes/1 Tutorials/Materials/2Tone.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/OToon- URP Toon Shading/RedToon.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/OToon- URP Toon Shading/RedToon.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/OToon- URP Toon Shading/ToonSlime.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/OToon- URP Toon Shading/ToonSlime.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/OToon- URP Toon Shading/Unity_2021_2022_upgrade.unitypackage.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/OToon- URP Toon Shading/UniversalRenderPipelineAsset_Otoon_Renderer.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/OToon- URP Toon Shading/UniversalRenderPipelineAsset_Otoon_Renderer.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Settings/URP-HighFidelity-Renderer.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Settings/URP-HighFidelity-Renderer.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/GraphicsSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/GraphicsSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/QualitySettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/QualitySettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ShaderGraphSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ShaderGraphSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/URPProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/URPProjectSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Oguz/OguzScene3.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Oguz/OguzScene3.unity" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,7 +101,7 @@
       <workItem from="1716027051398" duration="10875000" />
       <workItem from="1716070497625" duration="4973000" />
       <workItem from="1716075728649" duration="2591000" />
-      <workItem from="1716119286565" duration="2571000" />
+      <workItem from="1716119286565" duration="7758000" />
     </task>
     <servers />
   </component>

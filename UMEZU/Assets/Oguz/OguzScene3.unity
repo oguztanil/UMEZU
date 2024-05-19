@@ -7542,9 +7542,12 @@ MonoBehaviour:
   waypoints:
   - {fileID: 894056900}
   - {fileID: 511954522}
-  detectionRange: 1.94
-  attackRange: 2
+  detectionRange: 4
+  attackRange: 0.5
   idleTime: 2
+  investigateTime: 2
+  fieldOfView: 120
+  investigateRadius: 3
 --- !u!1001 &6423106399365875584
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7616,17 +7619,17 @@ PrefabInstance:
     - target: {fileID: 3110792072648045639, guid: eb35283930bb8e44b9ae5f8603bd10af,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.0005533993
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3110792072648045639, guid: eb35283930bb8e44b9ae5f8603bd10af,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.317
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3110792072648045639, guid: eb35283930bb8e44b9ae5f8603bd10af,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0005534291
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7654793637307657442, guid: eb35283930bb8e44b9ae5f8603bd10af,
         type: 3}

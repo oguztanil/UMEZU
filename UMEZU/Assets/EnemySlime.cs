@@ -20,7 +20,7 @@ public class EnemySlime : MonoBehaviour
     public float idleTime = 2f;
     public float investigateTime = 2f; // Time to investigate each waypoint around the last known location
     public float fieldOfView = 45f; // Field of view angle
-    public float investigateRadius = 3f; // Radius around the last known location to create investigation waypoints
+    public float investigateRadius = 2f; // Radius around the last known location to create investigation waypoints
 
     private int currentWaypointIndex = 0;
     private Transform player;
@@ -30,6 +30,8 @@ public class EnemySlime : MonoBehaviour
     private Vector3 lastKnownPlayerPosition;
     private Vector3[] investigateWaypoints;
     private int currentInvestigateWaypointIndex = 0;
+    private bool playerInSight = false;
+    private bool reachedLastKnownPosition = false;
 
     void Start()
     {
@@ -73,7 +75,6 @@ public class EnemySlime : MonoBehaviour
 
         if (CanSeePlayer())
         {
-            lastKnownPlayerPosition = player.position;
             currentState = State.Attack;
         }
 
@@ -92,7 +93,6 @@ public class EnemySlime : MonoBehaviour
 
         if (CanSeePlayer())
         {
-            lastKnownPlayerPosition = player.position;
             currentState = State.Attack;
         }
 
@@ -104,13 +104,12 @@ public class EnemySlime : MonoBehaviour
         if (player == null) return;
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-        if (distanceToPlayer > detectionRange)
+        if (distanceToPlayer > detectionRange || !CanSeePlayer())
         {
             currentState = State.Investigate;
             investigateTimer = 0f;
-            GenerateInvestigateWaypoints();
-            agent.SetDestination(investigateWaypoints[0]);
-            currentInvestigateWaypointIndex = 0;
+            reachedLastKnownPosition = false;
+            agent.SetDestination(lastKnownPlayerPosition);
             return;
         }
 
@@ -128,7 +127,24 @@ public class EnemySlime : MonoBehaviour
     {
         if (CanSeePlayer())
         {
-            lastKnownPlayerPosition = player.position;
+            currentState = State.Attack;
+            return;
+        }
+
+        if (!reachedLastKnownPosition)
+        {
+            if (!agent.pathPending && agent.remainingDistance < 0.5f)
+            {
+                reachedLastKnownPosition = true;
+                GenerateInvestigateWaypoints();
+                currentInvestigateWaypointIndex = 0;
+                agent.SetDestination(investigateWaypoints[currentInvestigateWaypointIndex]);
+            }
+            return;
+        }
+
+        if (CanSeePlayer())
+        {
             currentState = State.Attack;
             return;
         }
@@ -144,6 +160,7 @@ public class EnemySlime : MonoBehaviour
                 if (currentInvestigateWaypointIndex >= investigateWaypoints.Length)
                 {
                     currentState = State.Patrol;
+                    agent.SetDestination(waypoints[currentWaypointIndex].position);
                     return;
                 }
 
@@ -171,10 +188,26 @@ public class EnemySlime : MonoBehaviour
             {
                 if (hit.transform == player)
                 {
+                    playerInSight = true;
+                    lastKnownPlayerPosition = player.position; // Update last known position
                     return true;
                 }
             }
         }
+
+        if (playerInSight)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, (lastKnownPlayerPosition - transform.position).normalized, out hit, detectionRange))
+            {
+                if (hit.transform != player)
+                {
+                    lastKnownPlayerPosition = hit.point; // Update to the point of lost line of sight
+                    playerInSight = false;
+                }
+            }
+        }
+
         return false;
     }
 
@@ -210,7 +243,7 @@ public class EnemySlime : MonoBehaviour
         debugSphere.transform.position = lastKnownPlayerPosition;
         debugSphere.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f); // Set size to 0.1f
         debugSphere.GetComponent<Collider>().enabled = false;
-        
+
         // Set color to red
         Renderer renderer = debugSphere.GetComponent<Renderer>();
         if (renderer != null)
