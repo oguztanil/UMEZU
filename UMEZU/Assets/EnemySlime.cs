@@ -9,7 +9,8 @@ public class EnemySlime : MonoBehaviour
     {
         Idle,
         Patrol,
-        Attack
+        Attack,
+        Investigate
     }
 
     public State currentState;
@@ -17,11 +18,18 @@ public class EnemySlime : MonoBehaviour
     public float detectionRange = 10f;
     public float attackRange = 2f;
     public float idleTime = 2f;
+    public float investigateTime = 2f; // Time to investigate each waypoint around the last known location
+    public float fieldOfView = 45f; // Field of view angle
+    public float investigateRadius = 3f; // Radius around the last known location to create investigation waypoints
 
     private int currentWaypointIndex = 0;
     private Transform player;
     private NavMeshAgent agent;
     private float idleTimer = 0f;
+    private float investigateTimer = 0f;
+    private Vector3 lastKnownPlayerPosition;
+    private Vector3[] investigateWaypoints;
+    private int currentInvestigateWaypointIndex = 0;
 
     void Start()
     {
@@ -32,7 +40,7 @@ public class EnemySlime : MonoBehaviour
 
     public void InitializeEnemy()
     {
-
+        // Initialize any other enemy-specific parameters here if needed
     }
 
     void Update()
@@ -48,6 +56,9 @@ public class EnemySlime : MonoBehaviour
             case State.Attack:
                 Attack();
                 break;
+            case State.Investigate:
+                Investigate();
+                break;
         }
     }
 
@@ -62,8 +73,11 @@ public class EnemySlime : MonoBehaviour
 
         if (CanSeePlayer())
         {
+            lastKnownPlayerPosition = player.position;
             currentState = State.Attack;
         }
+
+        FaceForward();
     }
 
     void Patrol()
@@ -78,8 +92,11 @@ public class EnemySlime : MonoBehaviour
 
         if (CanSeePlayer())
         {
+            lastKnownPlayerPosition = player.position;
             currentState = State.Attack;
         }
+
+        FaceMovementDirection();
     }
 
     void Attack()
@@ -89,7 +106,11 @@ public class EnemySlime : MonoBehaviour
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
         if (distanceToPlayer > detectionRange)
         {
-            currentState = State.Idle;
+            currentState = State.Investigate;
+            investigateTimer = 0f;
+            GenerateInvestigateWaypoints();
+            agent.SetDestination(investigateWaypoints[0]);
+            currentInvestigateWaypointIndex = 0;
             return;
         }
 
@@ -99,6 +120,38 @@ public class EnemySlime : MonoBehaviour
         {
             // Perform attack (placeholder for damage function)
         }
+
+        FaceMovementDirection();
+    }
+
+    void Investigate()
+    {
+        if (CanSeePlayer())
+        {
+            lastKnownPlayerPosition = player.position;
+            currentState = State.Attack;
+            return;
+        }
+
+        if (!agent.pathPending && agent.remainingDistance < 0.5f)
+        {
+            investigateTimer += Time.deltaTime;
+            if (investigateTimer >= investigateTime)
+            {
+                investigateTimer = 0f;
+                currentInvestigateWaypointIndex++;
+
+                if (currentInvestigateWaypointIndex >= investigateWaypoints.Length)
+                {
+                    currentState = State.Patrol;
+                    return;
+                }
+
+                agent.SetDestination(investigateWaypoints[currentInvestigateWaypointIndex]);
+            }
+        }
+
+        FaceMovementDirection();
     }
 
     bool CanSeePlayer()
@@ -108,15 +161,64 @@ public class EnemySlime : MonoBehaviour
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
         if (distanceToPlayer > detectionRange) return false;
 
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, (player.position - transform.position).normalized, out hit, detectionRange))
+        Vector3 directionToPlayer = (player.position - transform.position).normalized;
+        float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
+
+        if (angleToPlayer <= fieldOfView / 2)
         {
-            if (hit.transform == player)
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, directionToPlayer, out hit, detectionRange))
             {
-                return true;
+                if (hit.transform == player)
+                {
+                    return true;
+                }
             }
         }
         return false;
+    }
+
+    private void FaceForward()
+    {
+        if (agent.velocity != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(agent.velocity.normalized);
+        }
+    }
+
+    private void FaceMovementDirection()
+    {
+        if (agent.velocity != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(agent.velocity.normalized);
+        }
+    }
+
+    private void GenerateInvestigateWaypoints()
+    {
+        investigateWaypoints = new Vector3[3];
+
+        for (int i = 0; i < 3; i++)
+        {
+            float angle = i * 120f; // 120 degrees between each waypoint
+            Vector3 offset = Quaternion.Euler(0, angle, 0) * Vector3.forward * investigateRadius;
+            investigateWaypoints[i] = lastKnownPlayerPosition + offset;
+        }
+
+        // Drop a debug sphere at the last known player position
+        GameObject debugSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        debugSphere.transform.position = lastKnownPlayerPosition;
+        debugSphere.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f); // Set size to 0.1f
+        debugSphere.GetComponent<Collider>().enabled = false;
+        
+        // Set color to red
+        Renderer renderer = debugSphere.GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            renderer.material.color = Color.red;
+        }
+
+        Destroy(debugSphere, investigateTime * 3); // Destroy after the investigation time
     }
 
     private void OnDrawGizmosSelected()
@@ -126,6 +228,25 @@ public class EnemySlime : MonoBehaviour
 
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, attackRange);
-    }
 
+        // Draw the field of view cone
+        Vector3 forward = transform.forward * detectionRange;
+        Vector3 leftBoundary = Quaternion.Euler(0, -fieldOfView / 2, 0) * forward;
+        Vector3 rightBoundary = Quaternion.Euler(0, fieldOfView / 2, 0) * forward;
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(transform.position, transform.position + leftBoundary);
+        Gizmos.DrawLine(transform.position, transform.position + rightBoundary);
+        Gizmos.DrawLine(transform.position + leftBoundary, transform.position + rightBoundary);
+
+        // Draw investigate waypoints if they exist
+        if (investigateWaypoints != null)
+        {
+            Gizmos.color = Color.green;
+            foreach (var point in investigateWaypoints)
+            {
+                Gizmos.DrawWireSphere(point, 0.1f);
+            }
+        }
+    }
 }
