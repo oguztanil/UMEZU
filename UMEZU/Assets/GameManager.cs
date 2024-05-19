@@ -7,16 +7,21 @@ using DG.Tweening;
 public class GameManager : MonoBehaviour
 {
     #region Singleton
+    public bool debugMode;
 
     public static GameManager instance;
     private void Awake()
     {
-       
+        
+
         instance = this;
+        if (debugMode) return;
         DontDestroyOnLoad(this.gameObject);
     }
 
     #endregion
+
+    public bool timeStopped;
 
     public void StartGame()
     {
@@ -43,6 +48,18 @@ public class GameManager : MonoBehaviour
 
     Coroutine loadSceneRoutine;
 
+    public void StopTime()
+    {
+        timeStopped = true;
+        Time.timeScale = 0;
+
+    }
+    public void ContinueTime()
+    {
+        
+        Time.timeScale = 1;
+        timeStopped = false;
+    }
     public IEnumerator LoadSceneRoutine(string nextLevelName)
     {
         //Immobile the player

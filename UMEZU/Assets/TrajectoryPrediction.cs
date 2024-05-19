@@ -24,6 +24,8 @@ public class TrajectoryPrediction : MonoBehaviour
 
     public void ShowTrajectory(Vector3 landingLocation, float power)
     {
+        
+
         Vector3 direction = (landingLocation - transform.position).normalized;
         float flightDuration = Vector3.Distance(transform.position, landingLocation) / power;
 

@@ -23,6 +23,7 @@ public class ozController : MonoBehaviour
     [SerializeField] float baseSize = 30;
     public float currentSize = 30;
     Vector3 baseScale = Vector3.one;
+    public bool dontLoseHealth = false;
 
     [SerializeField] GameObject splashParticlePrefab;
 
@@ -68,7 +69,11 @@ public class ozController : MonoBehaviour
     {
         LoseScalePerSec();
 
-        
+        if (GameManager.instance.timeStopped)
+        {
+            return;
+        }
+
         if (immovable)
         {
             return;
@@ -192,9 +197,13 @@ public class ozController : MonoBehaviour
 
     void LoseScalePerSec()
     {
-        currentSize -= Time.deltaTime * 0.7f;
-        SlimeTimer.instance.SetTimer(currentSize);
-        AdjustScale();
+        if (!dontLoseHealth)
+        {
+            currentSize -= Time.deltaTime * 0.7f;
+            SlimeTimer.instance.SetTimer(currentSize);
+            AdjustScale();
+        }
+        
     }
 
     IEnumerator PrepareJump()

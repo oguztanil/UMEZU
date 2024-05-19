@@ -2371,11 +2371,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 663907681872756422, guid: d7d4bcf2e26ecd149a237e9f47ee4010,
-        type: 3}
-      propertyPath: m_fontStyle
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1352335032917180937, guid: d7d4bcf2e26ecd149a237e9f47ee4010,
         type: 3}
       propertyPath: m_Name
@@ -2480,77 +2475,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3712882215157462160, guid: d7d4bcf2e26ecd149a237e9f47ee4010,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0.000024796
-      objectReference: {fileID: 0}
-    - target: {fileID: 4335726865112300932, guid: d7d4bcf2e26ecd149a237e9f47ee4010,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 255.884
-      objectReference: {fileID: 0}
-    - target: {fileID: 4335726865112300932, guid: d7d4bcf2e26ecd149a237e9f47ee4010,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 208.53
-      objectReference: {fileID: 0}
-    - target: {fileID: 4335726865112300932, guid: d7d4bcf2e26ecd149a237e9f47ee4010,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 178.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 4335726865112300932, guid: d7d4bcf2e26ecd149a237e9f47ee4010,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -157.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5176914176697107361, guid: d7d4bcf2e26ecd149a237e9f47ee4010,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: dcbccc3b24bd41d4da2c1c40a5c37cad,
-        type: 3}
-    - target: {fileID: 6071208614595447165, guid: d7d4bcf2e26ecd149a237e9f47ee4010,
-        type: 3}
-      propertyPath: slimeColor.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6071208614595447165, guid: d7d4bcf2e26ecd149a237e9f47ee4010,
-        type: 3}
-      propertyPath: slimeColor.b
-      value: 0.14509805
-      objectReference: {fileID: 0}
-    - target: {fileID: 6071208614595447165, guid: d7d4bcf2e26ecd149a237e9f47ee4010,
-        type: 3}
-      propertyPath: slimeColor.g
-      value: 0.87058824
-      objectReference: {fileID: 0}
-    - target: {fileID: 6071208614595447165, guid: d7d4bcf2e26ecd149a237e9f47ee4010,
-        type: 3}
-      propertyPath: slimeColor.r
-      value: 0.6117647
-      objectReference: {fileID: 0}
-    - target: {fileID: 6071208614595447165, guid: d7d4bcf2e26ecd149a237e9f47ee4010,
-        type: 3}
-      propertyPath: almostDyingColor.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6071208614595447165, guid: d7d4bcf2e26ecd149a237e9f47ee4010,
-        type: 3}
-      propertyPath: almostDyingColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6071208614595447165, guid: d7d4bcf2e26ecd149a237e9f47ee4010,
-        type: 3}
-      propertyPath: almostDyingColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6071208614595447165, guid: d7d4bcf2e26ecd149a237e9f47ee4010,
-        type: 3}
-      propertyPath: almostDyingColor.r
-      value: 0.6320754
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

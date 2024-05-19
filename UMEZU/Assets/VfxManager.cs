@@ -10,6 +10,7 @@ public class VfxManager : MonoBehaviour
 
     [SerializeField] Volume globalVolume;
 
+    public bool debugMode = false;
     
 
     #region Singleton
@@ -19,6 +20,7 @@ public class VfxManager : MonoBehaviour
     {
        
         instance = this;
+        if (debugMode) return;
         DontDestroyOnLoad(this.gameObject);
     }
 

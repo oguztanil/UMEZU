@@ -12,6 +12,7 @@ public class SlimeFragment : MonoBehaviour
     
     public void StartConsuming(ozController controller)
     {
+        Debug.Log("Being eaten");
         used = true;
         transform.parent.GetComponent<Collider>().enabled = false;
         transform.parent.GetComponent<Rigidbody>().isKinematic = true;
@@ -20,8 +21,6 @@ public class SlimeFragment : MonoBehaviour
     public void FinishConsuming(ozController controller)
     {
         
-        
-
         if (eatenParticle != null)
         {
             Quaternion oppositeRotation = Quaternion.Inverse(controller.transform.rotation);
