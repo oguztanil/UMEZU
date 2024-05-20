@@ -53,13 +53,18 @@ public class GameManager : MonoBehaviour
 
     }
 
+
     Coroutine loadSceneRoutine;
 
     public IEnumerator LoadSceneRoutine(string nextLevelName)
     {
-        //Immobile the player
-        var playerSlime = GetPlayerSlime();
-        playerSlime.SetImmovable(true);
+        if (SceneManager.GetActiveScene().name != "MenuOnly")
+        {
+            //Immobile the player
+            var playerSlime = GetPlayerSlime();
+            playerSlime.SetImmovable(true);
+        }
+        
 
         // Start loading the next scene asynchronously
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(nextLevelName);
@@ -90,6 +95,11 @@ public class GameManager : MonoBehaviour
         
     }
 
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
     public void RestartLevel()
     {
        
@@ -115,6 +125,12 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
-
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            LoadNextLevel("MenuOnly");
+        }
+    }
 
 }

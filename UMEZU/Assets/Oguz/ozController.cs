@@ -117,7 +117,7 @@ public class ozController : MonoBehaviour
 
     void CheckFallDown()
     {
-        if (transform.position.y < -100 && !restarting)
+        if (transform.position.y < -30 && !restarting)
         {
             GameManager.instance.RestartLevel();
             restarting = true;
@@ -351,7 +351,7 @@ public class ozController : MonoBehaviour
         {
             Vector3 bounceDirection = (transform.position - collision.contacts[0].point).normalized;
             bounceDirection.y = 0;
-            Vector3 bounceTarget = transform.position + bounceDirection * 1.5f; // Replace bounceDistance with your desired distance
+            Vector3 bounceTarget = transform.position + bounceDirection * 0.5f; // Replace bounceDistance with your desired distance
 
             Sequence damageSequence = DOTween.Sequence();
 
@@ -380,7 +380,7 @@ public class ozController : MonoBehaviour
 
         }
 
-        if (collision.gameObject.CompareTag("Obstacle") && currentState == SlimeState.Jumping)
+        if (collision.gameObject.CompareTag("Obstacle") && (currentState == SlimeState.Jumping|| currentState == SlimeState.colliding))
         {
             
             // Calculate bounce direction
