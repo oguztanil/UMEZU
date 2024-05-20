@@ -19,8 +19,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     [SerializeField] AudioSource blackHoleSound;
-    [SerializeField] AudioSource menuTheme;
-    [SerializeField] AudioSource gameTheme;
+
 
 
     public bool timeStopped;
