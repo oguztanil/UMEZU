@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 843617565420377851}
   - component: {fileID: 4123954377165561093}
   - component: {fileID: 3045811223562154006}
+  - component: {fileID: 1543734448394217436}
   m_Layer: 0
   m_Name: 2
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -83,6 +84,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &1543734448394217436
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1593674934393095358}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -7537872121368431757, guid: 8965c667e8eb6574a8f3ae7d4f954d12, type: 3}
 --- !u!1 &3880224717585180150
 GameObject:
   m_ObjectHideFlags: 0
@@ -94,9 +117,10 @@ GameObject:
   - component: {fileID: 3620284070584755853}
   - component: {fileID: 2489691502145117640}
   - component: {fileID: 3306542037516613769}
+  - component: {fileID: 4927012636451735186}
   m_Layer: 0
   m_Name: 1
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -166,6 +190,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &4927012636451735186
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3880224717585180150}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -7999142710789046518, guid: 8965c667e8eb6574a8f3ae7d4f954d12, type: 3}
 --- !u!1 &6314357773368977949
 GameObject:
   m_ObjectHideFlags: 0
