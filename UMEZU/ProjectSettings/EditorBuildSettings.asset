@@ -17,4 +17,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Arda/Levels/Level3.unity
     guid: 3a1f4d7512c191247be7e1595c49a4e7
+  - enabled: 1
+    path: Assets/Arda/Levels/Level4Final.unity
+    guid: 0b1702c64bec49b4c9337e99d011c920
+  - enabled: 1
+    path: Assets/Arda/Levels/Level5guncel.unity
+    guid: 4e0342c1043636447a94b6cef112ed1a
   m_configObjects: {}

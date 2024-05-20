@@ -5005,7 +5005,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 211a48a3adc22d3468c9e251521cd8b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextSceneName: Level5
+  nextSceneName: Level5guncel
 --- !u!65 &1436777589
 BoxCollider:
   m_ObjectHideFlags: 0
