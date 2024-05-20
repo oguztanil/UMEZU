@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using System;
 
 public class ozController : MonoBehaviour
 {
@@ -199,6 +200,13 @@ public class ozController : MonoBehaviour
             SlimeTimer.instance.SetTimer(currentSize);
         }
         AdjustScale();
+    }
+
+    public void GetDamaged(float damageValue)
+    {
+        Debug.Log("I'M DAMAGED");
+        anim.SetTrigger("hurt");
+        
     }
 
     IEnumerator PrepareJump()

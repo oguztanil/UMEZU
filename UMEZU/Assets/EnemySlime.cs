@@ -9,10 +9,13 @@ public class EnemySlime : MonoBehaviour
     {
         Idle,
         Patrol,
+        Chase,
         Attack,
         Flee,
         Investigate
     }
+
+    public bool isFriendly = false;
 
     public State currentState;
     public Transform[] waypoints;
@@ -43,7 +46,9 @@ public class EnemySlime : MonoBehaviour
     private bool playerInSight = false;
     private bool reachedLastKnownPosition = false;
     private bool fleeing = false;
-    
+
+    private Animator anim;
+
     bool isAttacking = false;
     public float attackCooldown = 1f;
     float attackTimer = 0f;
@@ -51,10 +56,12 @@ public class EnemySlime : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        anim = GetComponent<Animator>();
         //agent.speed = 
         slimeController = GameManager.instance.GetPlayerSlime();
         player = slimeController.transform;
         currentState = State.Idle;
+
     }
 
     public void InitializeEnemy()
@@ -83,11 +90,14 @@ public class EnemySlime : MonoBehaviour
             case State.Patrol:
                 Patrol();
                 break;
-            case State.Attack:
-                Attack();
+            case State.Chase:
+                Chasing();
                 break;
             case State.Flee: // Flee durumu eklendi
                 Flee();
+                break;
+            case State.Attack:
+                Attacking();
                 break;
             case State.Investigate:
                 Investigate();
@@ -106,7 +116,7 @@ public class EnemySlime : MonoBehaviour
 
         if (CanSeePlayer())
         {
-            currentState = State.Attack;
+            currentState = State.Chase;
         }
 
         FaceForward();
@@ -116,6 +126,8 @@ public class EnemySlime : MonoBehaviour
     {
         if (waypoints.Length == 0) return;
 
+        anim.SetBool("moving", true);
+
         if (!agent.pathPending && agent.remainingDistance < 0.5f)
         {
             currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Length;
@@ -124,15 +136,25 @@ public class EnemySlime : MonoBehaviour
 
         if (CanSeePlayer())
         {
-            currentState = State.Attack;
+            
+            currentState = State.Chase;
+            return;
+
+
+        }
+        else
+        {
+            FaceMovementDirection();
         }
 
-        FaceMovementDirection();
     }
 
-    void Attack()
+
+    void Chasing()
     {
         if (player == null) return;
+
+        
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
         if (distanceToPlayer > detectionRange || !CanSeePlayer())
@@ -146,30 +168,49 @@ public class EnemySlime : MonoBehaviour
 
         agent.SetDestination(player.position);
 
-        if (distanceToPlayer <= attackRange && !isAttacking)
+        if (distanceToPlayer <= attackRange && currentState != State.Attack)
         {
-            ozController playerController = player.GetComponent<ozController>();
-            playerController.ScaleDown(damageValue);
-            isAttacking = true;
-            Invoke("ResetAttackState", 1f);
+            Debug.Log($"Distance to player: {distanceToPlayer} and attack range is {attackRange}");
+            currentState = State.Attack;
+            
+            return;
+
         }
+        
 
         FaceMovementDirection();
     }
 
-    void ResetAttackState()
+    private float attackCooldownTimer = 0;
+    void Attacking()
     {
-        isAttacking = false;
-    }
-    
-    void OnCollisionEnter(Collision collision)
-    {
-        // Eğer çarpışan obje oyuncu ise ve NPC'nin şu anki durumu "Idle" ise
-        if (collision.gameObject.CompareTag("Player") && currentState != State.Flee)
+
+        if (attackCooldownTimer >= 1)
         {
-            // NPC'nin "Flee" durumuna geç
-            currentState = State.Flee;
+            Debug.Log("Attacked");
+            anim.SetTrigger("attack");
+            attackCooldownTimer = 0;
+
+            transform.LookAt(player);
+
+            float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+            if (distanceToPlayer >= attackRange)
+            {
+
+                currentState = State.Chase;
+                return;
+
+            }
+            currentState = State.Chase;
+            return;
         }
+        
+        attackCooldownTimer += Time.deltaTime;
+    }
+
+    public void DamagePlayer()
+    {
+        slimeController.GetDamaged(damageValue);
     }
 
     void Flee()
@@ -201,7 +242,7 @@ public class EnemySlime : MonoBehaviour
     {
         if (CanSeePlayer())
         {
-            currentState = State.Attack;
+            currentState = State.Chase;
             return;
         }
 
