@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     [SerializeField] AudioSource blackHoleSound;
-
+    [SerializeField] AudioSource musicTheme;
 
 
     public bool timeStopped;
@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
     public IEnumerator LoadSceneRoutine(string nextLevelName)
     {
        
-        if (SceneManager.GetActiveScene().name != "MenuOnly")
+        if (SceneManager.GetActiveScene().name != "MenuOnly" && SceneManager.GetActiveScene().name != "EndScene")
         {
             //Immobile the player
             var playerSlime = GetPlayerSlime();
@@ -144,10 +144,14 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            musicTheme.Stop();
             LoadNextLevel("MenuOnly");
         }
     }
 
-
+    public void SetVolumeMusic(float value)
+    {
+        musicTheme.volume = value;
+    }
 
 }

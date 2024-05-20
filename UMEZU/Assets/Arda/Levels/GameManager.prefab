@@ -352,8 +352,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blackHoleSound: {fileID: 8599323287941018798}
-  menuTheme: {fileID: 1800361928456723906}
-  gameTheme: {fileID: 5168421186297088655}
+  musicTheme: {fileID: 1800361928456723906}
   timeStopped: 0
 --- !u!1 &8796797367480390189
 GameObject:
@@ -371,7 +370,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4004626613872865344
 RectTransform:
   m_ObjectHideFlags: 0
