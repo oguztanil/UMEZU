@@ -64,6 +64,7 @@ public class ozController : MonoBehaviour
         immovable = set;
     }
 
+    
     void Update()
     {
         LoseScalePerSec();
@@ -312,6 +313,7 @@ public class ozController : MonoBehaviour
         Sequence seq = DOTween.Sequence();
         seq.AppendCallback(() =>
         {
+            GetComponent<SlimePlayerSoundManager>().PlayEatingSound();
             slimeFragment.StartConsuming(this);
             SetImmovable(true);
             transform.LookAt(slimeFragment.transform);
