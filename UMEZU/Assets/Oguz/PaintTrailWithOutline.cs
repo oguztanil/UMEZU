@@ -19,6 +19,8 @@ public class RoundedTrail : MonoBehaviour
         innerTrail.material = roundTrailMaterial;
         innerTrail.colorGradient = CreateGradient(Color.green);
         innerTrail.minVertexDistance = 0.1f;
+        innerTrail.numCapVertices = 90; // Set the number of cap vertices
+        innerTrail.alignment = LineAlignment.View;
 
         // Configure the outer trail for the outline
         outerTrail = gameObject.AddComponent<TrailRenderer>();
@@ -28,6 +30,8 @@ public class RoundedTrail : MonoBehaviour
         outerTrail.material = roundTrailMaterial;
         outerTrail.colorGradient = CreateGradient(Color.black);
         outerTrail.minVertexDistance = 0.1f;
+        outerTrail.numCapVertices = 90; // Set the number of cap vertices
+        outerTrail.alignment = LineAlignment.View;
 
         // Set the sorting order so that the inner trail appears on top
         innerTrail.sortingOrder = 1;

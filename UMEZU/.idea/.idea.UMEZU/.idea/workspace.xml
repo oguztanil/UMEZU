@@ -6,14 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="0430a68f-cccc-4657-94e1-e4065d6504d6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.UMEZU/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UMEZU/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Kevser/chimie.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Kevser/chimie.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Kevser/dolaplar/Dolap1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Kevser/dolaplar/Dolap1.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Kevser/dolaplar/Dolap2.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Kevser/dolaplar/Dolap2.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Kevser/dolaplar/Dolap3.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Kevser/dolaplar/Dolap3.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Kevser/dolaplar/Dolap4.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Kevser/dolaplar/Dolap4.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Kevser/lab_textured.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Kevser/lab_textured.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/OToon- URP Toon Shading/Unity_2021_2022_upgrade.unitypackage.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Oguz/PaintTrail.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Oguz/PaintTrail.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Oguz/PaintTrailWithOutline.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Oguz/PaintTrailWithOutline.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,7 +107,7 @@
       <workItem from="1716119286565" duration="27168000" />
       <workItem from="1716163202581" duration="1223000" />
       <workItem from="1716165031788" duration="650000" />
-      <workItem from="1716174440896" duration="6817000" />
+      <workItem from="1716174440896" duration="10179000" />
     </task>
     <servers />
   </component>

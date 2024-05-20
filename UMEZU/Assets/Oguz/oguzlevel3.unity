@@ -12658,6 +12658,7 @@ MonoBehaviour:
   moveSound: {fileID: 7523818532923634488}
   splashSound: {fileID: 4800217089317948389}
   eatingSound: {fileID: 4188525174675380501}
+  punchSound: {fileID: 0}
 --- !u!4 &1991582902129805497
 Transform:
   m_ObjectHideFlags: 0
@@ -15398,8 +15399,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6cee6692bfa63e46928899827196599, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  paintColor: {r: 0, g: 1, b: 0, a: 1}
-  outlineColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!114 &8518256934432644999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15407,7 +15406,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6506005326762300801}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 54f7a73aa9ba74b4c9ec4ad9904eebb7, type: 3}
   m_Name: 

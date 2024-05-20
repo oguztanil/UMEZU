@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.343997, y: 0.040000003, z: -9.028365}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7576624232655622967}
@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 7493631911340835439}
-  isOpen: 0
+  isOpen: 1
 --- !u!95 &7493631911340835439
 Animator:
   serializedVersion: 5
@@ -349,7 +349,7 @@ MeshRenderer:
   m_Materials:
   - {fileID: -3143577760769057415, guid: 8965c667e8eb6574a8f3ae7d4f954d12, type: 3}
   - {fileID: -318948823523225959, guid: 8965c667e8eb6574a8f3ae7d4f954d12, type: 3}
-  - {fileID: 4792700334887860985, guid: 8965c667e8eb6574a8f3ae7d4f954d12, type: 3}
+  - {fileID: 2100000, guid: 5ca02f4e187095042850cf45a7de3abf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -388,8 +388,8 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 8211867392827749783, guid: 8965c667e8eb6574a8f3ae7d4f954d12, type: 3}
