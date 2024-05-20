@@ -5,8 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0430a68f-cccc-4657-94e1-e4065d6504d6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.UMEZU/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UMEZU/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Arda/Levels/Level2.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Arda/Levels/Level2.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Arda/Levels/Level3.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Arda/Levels/Level3.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Arda/Levels/Level3.unity.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Arda/Levels/Level3.unity.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/OToon- URP Toon Shading/Unity_2021_2022_upgrade.unitypackage.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" afterDir="false" />
     </list>
@@ -105,6 +106,7 @@
       <workItem from="1716119286565" duration="27168000" />
       <workItem from="1716163202581" duration="1223000" />
       <workItem from="1716165031788" duration="650000" />
+      <workItem from="1716174440896" duration="374000" />
     </task>
     <servers />
   </component>
