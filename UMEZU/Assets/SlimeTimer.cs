@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class SlimeTimer : MonoBehaviour
 {
@@ -41,6 +42,14 @@ public class SlimeTimer : MonoBehaviour
         {
             timerText.color = slimeColor;
         }
+    }
+
+    public void Damaged()
+    {
+        timerText.color = almostDyingColor;
+        timerText.DOColor(slimeColor, 1);
+        timerText.transform.localScale = Vector3.one * 1.2f;
+        timerText.transform.DOScale(Vector3.one, 1);
     }
 
 }

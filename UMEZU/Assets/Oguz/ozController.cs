@@ -10,7 +10,7 @@ public class ozController : MonoBehaviour
     public float rotationSpeed = 10f;
     Animator anim;
     public bool mouseDown;
-
+    public bool restarting;
     private float moveSpeed => Mathf.Clamp(3 / currentSize, 1, 10);
 
     private Vector3 forward, right;
@@ -28,6 +28,8 @@ public class ozController : MonoBehaviour
     [SerializeField] GameObject splashParticlePrefab;
 
     bool immovable = false;
+    public bool invincible = false;
+
 
 
     [SerializeField] TrajectoryPrediction trajectoryPrediction;
@@ -75,6 +77,10 @@ public class ozController : MonoBehaviour
         {
             return;
         }
+        if (GameManager.instance.timeStopped)
+        {
+            return;
+        }
 
         switch (currentState)
         {
@@ -82,16 +88,24 @@ public class ozController : MonoBehaviour
                 Move();
                 HandleInputStartJump();
                 LookAtCursor();
+                invincible = false;
+
                 break;
             case SlimeState.Moving:
                 Move();
                 HandleInputStartJump();
+                invincible = false;
                 break;
             case SlimeState.PreparingJump:
                 LookAtCursor();
+                invincible = false;
 
                 break;
             case SlimeState.Jumping:
+                invincible = true;
+                break;
+            case SlimeState.colliding:
+                invincible = true;
                 break;
             default:
                 break;
@@ -140,6 +154,7 @@ public class ozController : MonoBehaviour
     {
         currentSize = Mathf.Max(currentSize - lostSize, minSize);
         AdjustScale();
+        CheckDead();
     }
 
     void AdjustScale()
@@ -155,7 +170,7 @@ public class ozController : MonoBehaviour
 
         if (other.TryGetComponent<SlimeFragment>(out SlimeFragment slimeFragment))
         {
-            if (slimeFragment.NotUsed())
+            if (slimeFragment.NotUsed() && currentState != SlimeState.colliding && currentState != SlimeState.Jumping)
             {
                 ConsumeObject(slimeFragment);
             }
@@ -204,9 +219,23 @@ public class ozController : MonoBehaviour
 
     public void GetDamaged(float damageValue)
     {
-        Debug.Log("I'M DAMAGED");
+        if (invincible) return;
+
         anim.SetTrigger("hurt");
+        ScaleDown(damageValue);
+        SlimeTimer.instance.Damaged();
+        CheckDead();
         
+    }
+
+    void CheckDead()
+    {
+        if (currentSize <= 1f && !restarting)
+        {
+            Debug.Log("Dead");
+            GameManager.instance.RestartLevel();
+            restarting = true;
+        }
     }
 
     IEnumerator PrepareJump()
@@ -251,6 +280,8 @@ public class ozController : MonoBehaviour
     {
         jumpSequence = DOTween.Sequence();
 
+        invincible = true;
+
         jumpSequence
             .AppendCallback(() =>
             {
@@ -259,10 +290,12 @@ public class ozController : MonoBehaviour
                 anim.SetTrigger("jump");
                 Debug.Log("Jumped");
 
+                invincible = true;
             })
             .Append(this.transform.DOMove(jumpLocation, 1).SetEase(Ease.Linear)
             .OnComplete(() =>
             {
+                invincible = false;
                 anim.SetTrigger("land");
                 Debug.Log("Landed");
                 currentState = SlimeState.Idle;
@@ -278,6 +311,39 @@ public class ozController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.TryGetComponent(out EnemySlime enemySlime) && currentState == SlimeState.Jumping)
+        {
+            Vector3 bounceDirection = (transform.position - collision.contacts[0].point).normalized;
+            bounceDirection.y = 0;
+            Vector3 bounceTarget = transform.position + bounceDirection * 1.5f; // Replace bounceDistance with your desired distance
+
+            Sequence damageSequence = DOTween.Sequence();
+
+            Sequence bounceSequence = DOTween.Sequence();
+            bounceSequence.AppendCallback(() =>
+            {
+                Debug.Log("Enemy Hit");
+                anim.SetTrigger("collideIdle");
+                jumpSequence.Kill();
+                currentState = SlimeState.colliding;
+                enemySlime.GetDamaged(10);
+
+
+                if (splashParticlePrefab != null)
+                {
+                    VfxManager.instance.InstantiateVFX(splashParticlePrefab, transform.position);
+                }
+            })
+            .Append(this.transform.DOMove(bounceTarget, 1).SetEase(Ease.OutQuad))
+            .OnComplete(() =>
+            {
+                anim.SetTrigger("land");
+                currentState = SlimeState.Idle; // Set to appropriate state after bounce
+
+            });
+
+        }
+
         if (collision.gameObject.CompareTag("Obstacle") && currentState == SlimeState.Jumping)
         {
             

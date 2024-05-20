@@ -18,6 +18,18 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+    public bool timeStopped;
+    public void StopTime()
+    {
+        timeStopped = true;
+        Time.timeScale = 0;
+    }
+    public void ContinueTime()
+    {
+        timeStopped = false;
+        Time.timeScale = 1;
+    }
+
     public void StartGame()
     {
         Sequence seq = DOTween.Sequence();
@@ -78,6 +90,15 @@ public class GameManager : MonoBehaviour
         
     }
 
+    public void RestartLevel()
+    {
+       
+
+        string thisScene = SceneManager.GetActiveScene().name;
+        
+        Debug.Log(thisScene);
+        LoadNextLevel(thisScene);
+    }
     public ozController GetPlayerSlime()
     {
         GameObject[] objectsTaggedPlayer = GameObject.FindGameObjectsWithTag("Player");

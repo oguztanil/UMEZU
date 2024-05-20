@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using DG.Tweening;
 
 public class EnemySlime : MonoBehaviour
 {
@@ -11,12 +12,21 @@ public class EnemySlime : MonoBehaviour
         Patrol,
         Chase,
         Attack,
+        Damaged,
         Flee,
         Investigate
     }
 
+    [Header("SlimeSettings")]
     public bool isFriendly = false;
+    public float currentSize = 30;
+    public float maxSize = 100;
+    public Vector3 baseScale = Vector3.one;
+    public float minSize = 1;
+    public float baseSize = 30;
+    [SerializeField] GameObject slimeFragmentPrefab;
 
+    [Header("AI Settings")]
     public State currentState;
     public Transform[] waypoints;
     public float detectionRange = 10f;
@@ -47,7 +57,7 @@ public class EnemySlime : MonoBehaviour
     private bool reachedLastKnownPosition = false;
     private bool fleeing = false;
 
-    private Animator anim;
+    public Animator anim;
 
     bool isAttacking = false;
     public float attackCooldown = 1f;
@@ -57,7 +67,7 @@ public class EnemySlime : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
-        //agent.speed = 
+        
         slimeController = GameManager.instance.GetPlayerSlime();
         player = slimeController.transform;
         currentState = State.Idle;
@@ -81,7 +91,7 @@ public class EnemySlime : MonoBehaviour
                 currentState = State.Idle;
             }
         }
-        
+
         switch (currentState)
         {
             case State.Idle:
@@ -96,6 +106,10 @@ public class EnemySlime : MonoBehaviour
             case State.Flee: // Flee durumu eklendi
                 Flee();
                 break;
+            case State.Damaged:
+                Damaged();
+                break;
+                
             case State.Attack:
                 Attacking();
                 break;
@@ -116,7 +130,16 @@ public class EnemySlime : MonoBehaviour
 
         if (CanSeePlayer())
         {
-            currentState = State.Chase;
+            if (isFriendly) 
+            {
+                currentState = State.Flee;
+
+            }
+            else
+            {
+                currentState = State.Chase;
+
+            }
         }
 
         FaceForward();
@@ -136,8 +159,15 @@ public class EnemySlime : MonoBehaviour
 
         if (CanSeePlayer())
         {
-            
-            currentState = State.Chase;
+            if (isFriendly)
+            {
+                currentState = State.Flee;
+            }
+            else
+            {
+                currentState = State.Chase;
+            }
+
             return;
 
 
@@ -157,14 +187,14 @@ public class EnemySlime : MonoBehaviour
         
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-        if (distanceToPlayer > detectionRange || !CanSeePlayer())
-        {
-            currentState = State.Investigate;
-            investigateTimer = 0f;
-            reachedLastKnownPosition = false;
-            agent.SetDestination(lastKnownPlayerPosition);
-            return;
-        }
+        //if (distanceToPlayer > detectionRange || !CanSeePlayer())
+        //{
+        //    currentState = State.Investigate;
+        //    investigateTimer = 0f;
+        //    reachedLastKnownPosition = false;
+        //    agent.SetDestination(lastKnownPlayerPosition);
+        //    return;
+        //}
 
         agent.SetDestination(player.position);
 
@@ -185,7 +215,7 @@ public class EnemySlime : MonoBehaviour
     void Attacking()
     {
 
-        if (attackCooldownTimer >= 1)
+        if (attackCooldownTimer >= 1 && slimeController.invincible == false)
         {
             Debug.Log("Attacked");
             anim.SetTrigger("attack");
@@ -211,12 +241,61 @@ public class EnemySlime : MonoBehaviour
     public void DamagePlayer()
     {
         slimeController.GetDamaged(damageValue);
+        
+    }
+    public void GetDamaged(float damageValue)
+    {
+        
+        anim.SetTrigger("hurt");
+        ScaleDown(damageValue);
+        currentState = State.Damaged;
+        damagedDurationTimer = 0;
+        ThrowSlimeFragment();
+        CheckDead();
+
+    }
+    private void ThrowSlimeFragment()
+    {
+        if (slimeFragmentPrefab != null)
+        {
+            // Instantiate the slime fragment at the slime's position
+            GameObject slimeFragment = Instantiate(slimeFragmentPrefab, transform.position, Quaternion.identity);
+
+            // Get the Rigidbody component of the slime fragment
+            Rigidbody rb = slimeFragment.GetComponent<Rigidbody>();
+
+            if (rb != null)
+            {
+                // Calculate a random direction slightly away from the slime on the X and Z axes
+                Vector3 throwDirection = new Vector3(Random.Range(-1f, 1f), 0.5f, Random.Range(-1f, 1f)).normalized;
+
+                // Apply force to the slime fragment to throw it away
+                float throwForce = 5f; // Adjust this value as needed
+                rb.AddForce(throwDirection * throwForce, ForceMode.Impulse);
+            }
+        }
+    }
+    float damagedDuration = 1.5f;
+    float damagedDurationTimer = 0;
+    void Damaged()
+    {
+        if (damagedDurationTimer < damagedDuration)
+        {
+            damagedDurationTimer += Time.deltaTime;
+            transform.position = transform.position;
+        }
+        else
+        {
+            currentState = State.Chase;
+        }
+
     }
 
     void Flee()
     {
         if (player == null) return;
 
+        
         // Oyuncunun konumunu al
         Vector3 playerPosition = player.position;
 
@@ -226,14 +305,23 @@ public class EnemySlime : MonoBehaviour
         // Yönü normalize et, sadece yönünü al, uzunluğu önemli değil
         fleeDirection.Normalize();
 
-        // NPC'nin kaçma hızını ve kaçış yönünü kullanarak kaçma hareketini hesapla
-        Vector3 fleeMovement = fleeDirection * fleeSpeed * Time.deltaTime;
+        float fleeDistance = 1000f; // This value determines how far the NPC will try to flee
+        Vector3 fleeTarget = transform.position + fleeDirection * fleeDistance;
 
-        // NPC'nin konumuna kaçma hareketini uygula
-        transform.position += fleeMovement;
+        // Check if the flee target is within the NavMesh, otherwise find the nearest point on the NavMesh
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(fleeTarget, out hit, fleeDistance, NavMesh.AllAreas))
+        {
+            fleeTarget = hit.position; // Set fleeTarget to the nearest valid position on the NavMesh
+        }
+
+        // Set the NavMeshAgent destination to the flee target
+        agent.SetDestination(fleeTarget);
+
+
 
         // NPC'nin dönüşü, kaçış yönünün tersine doğru yapılır
-        transform.rotation = Quaternion.LookRotation(-fleeDirection);
+        transform.rotation = Quaternion.LookRotation(fleeDirection);
         
         FaceMovementDirection();
     }
@@ -419,6 +507,38 @@ public class EnemySlime : MonoBehaviour
             {
                 Gizmos.DrawWireSphere(point, 0.1f);
             }
+        }
+    }
+
+    public void ScaleUp(float addedSize)
+    {
+        currentSize = Mathf.Min(currentSize + addedSize, maxSize);
+        AdjustScale();
+
+    }
+    public void ScaleDown(float lostSize)
+    {
+        currentSize = Mathf.Max(currentSize - lostSize, minSize);
+        AdjustScale();
+        CheckDead();
+    }
+
+    void AdjustScale()
+    {
+        float scaleFactor = currentSize / baseSize;
+        transform.DOScale(baseScale * scaleFactor, .5f);
+
+    }
+
+
+    void CheckDead()
+    {
+        
+        if (currentSize <= 1f)
+        {
+            Debug.Log("Dead");
+
+            this.gameObject.SetActive(false);
         }
     }
 }
