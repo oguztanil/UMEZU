@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
         
     }
 
-    private ozController GetPlayerSlime()
+    public ozController GetPlayerSlime()
     {
         GameObject[] objectsTaggedPlayer = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject objectTaggedPlayer in objectsTaggedPlayer)

@@ -33,6 +33,7 @@ public class EnemySlime : MonoBehaviour
 
     private int currentWaypointIndex = 0;
     private Transform player;
+    private ozController slimeController;
     private NavMeshAgent agent;
     private float idleTimer = 0f;
     private float investigateTimer = 0f;
@@ -51,7 +52,8 @@ public class EnemySlime : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         //agent.speed = 
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        slimeController = GameManager.instance.GetPlayerSlime();
+        player = slimeController.transform;
         currentState = State.Idle;
     }
 
