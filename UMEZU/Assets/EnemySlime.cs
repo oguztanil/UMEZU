@@ -24,7 +24,7 @@ public class EnemySlime : MonoBehaviour
     public Vector3 baseScale = Vector3.one;
     public float minSize = 1;
     public float baseSize = 30;
-    [SerializeField] GameObject slimeFragmentPrefab;
+    public GameObject slimeFragmentPrefab;
 
     [Header("AI Settings")]
     public State currentState;

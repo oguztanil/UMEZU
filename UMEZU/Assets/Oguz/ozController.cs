@@ -110,6 +110,18 @@ public class ozController : MonoBehaviour
             default:
                 break;
         }
+
+        CheckFallDown();
+
+    }
+
+    void CheckFallDown()
+    {
+        if (transform.position.y < -100 && !restarting)
+        {
+            GameManager.instance.RestartLevel();
+            restarting = true;
+        }
     }
 
     void Move()
@@ -225,6 +237,7 @@ public class ozController : MonoBehaviour
         ScaleDown(damageValue);
         SlimeTimer.instance.Damaged();
         CheckDead();
+        GetComponent<SlimePlayerSoundManager>().PlayPunchSound();
         
     }
 
@@ -311,6 +324,29 @@ public class ozController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.TryGetComponent(out EnemySlime friendlySlime) && currentState == SlimeState.Moving)
+        {
+            if (friendlySlime.isFriendly)
+            {
+                if (currentSize > friendlySlime.currentSize)
+                {
+                    Vector3 friendlySlimePos = friendlySlime.transform.position;
+                    Quaternion rotation = friendlySlime.transform.rotation;
+                    GameObject fragmentPrefab = friendlySlime.slimeFragmentPrefab;
+
+                    friendlySlime.gameObject.SetActive(false);
+
+                    GameObject fragmentInstanceGO = Instantiate(fragmentPrefab, friendlySlimePos, rotation);
+                    //SlimeFragment fragmentInstance = fragmentInstanceGO.GetComponent<SlimeFragment>();
+                    //Debug.Log(fragmentInstance);
+                    //if (fragmentInstance.NotUsed())
+                    //{
+                    //    ConsumeObject(fragmentInstance); 
+                    //}
+                }
+            }
+        }
+
         if (collision.gameObject.TryGetComponent(out EnemySlime enemySlime) && currentState == SlimeState.Jumping)
         {
             Vector3 bounceDirection = (transform.position - collision.contacts[0].point).normalized;
@@ -327,7 +363,7 @@ public class ozController : MonoBehaviour
                 jumpSequence.Kill();
                 currentState = SlimeState.colliding;
                 enemySlime.GetDamaged(10);
-
+                GetComponent<SlimePlayerSoundManager>().PlayPunchSound();
 
                 if (splashParticlePrefab != null)
                 {
@@ -377,6 +413,8 @@ public class ozController : MonoBehaviour
             
             });
         }
+
+       
     }
 
 

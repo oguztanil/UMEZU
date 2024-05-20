@@ -202,6 +202,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7cf9119f68702540a288d324a28cb40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healAmount: 5
+  healAmount: 10
   eatenParticle: {fileID: 5824964296542175219, guid: dff8becb642ea0345abb62821b0d6073,
     type: 3}

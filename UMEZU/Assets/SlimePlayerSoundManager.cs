@@ -8,6 +8,7 @@ public class SlimePlayerSoundManager : MonoBehaviour
     [SerializeField] AudioSource moveSound;
     [SerializeField] AudioSource splashSound;
     [SerializeField] AudioSource eatingSound;
+    [SerializeField] AudioSource punchSound;
 
     public void PlayJumpsound()
     {
@@ -24,6 +25,10 @@ public class SlimePlayerSoundManager : MonoBehaviour
     public void PlayEatingSound()
     {
         eatingSound.Play();
+    }
+    public void PlayPunchSound()
+    {
+        punchSound.Play();
     }
 
 }
