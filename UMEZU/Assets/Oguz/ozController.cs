@@ -193,7 +193,10 @@ public class ozController : MonoBehaviour
     void LoseScalePerSec()
     {
         currentSize -= Time.deltaTime * 0.7f;
-        SlimeTimer.instance.SetTimer(currentSize);
+        if (SlimeTimer.instance != null)
+        {
+            SlimeTimer.instance.SetTimer(currentSize);
+        }
         AdjustScale();
     }
 

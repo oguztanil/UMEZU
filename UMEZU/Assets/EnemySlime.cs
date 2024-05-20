@@ -10,6 +10,7 @@ public class EnemySlime : MonoBehaviour
         Idle,
         Patrol,
         Attack,
+        Flee,
         Investigate
     }
 
@@ -21,6 +22,14 @@ public class EnemySlime : MonoBehaviour
     public float investigateTime = 2f; // Time to investigate each waypoint around the last known location
     public float fieldOfView = 45f; // Field of view angle
     public float investigateRadius = 2f; // Radius around the last known location to create investigation waypoints
+    public float attackableSize = 40f;
+    public float fleeSpeed = 3f;
+    public float fleeTime = 5f;
+    public float fleeRadius = 1f;
+    public float damageValue = 5f;
+    public float attackDelay = 1f;
+    
+    private float fleeStartTime;
 
     private int currentWaypointIndex = 0;
     private Transform player;
@@ -32,10 +41,16 @@ public class EnemySlime : MonoBehaviour
     private int currentInvestigateWaypointIndex = 0;
     private bool playerInSight = false;
     private bool reachedLastKnownPosition = false;
+    private bool fleeing = false;
+    
+    bool isAttacking = false;
+    public float attackCooldown = 1f;
+    float attackTimer = 0f;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        //agent.speed = 
         player = GameObject.FindGameObjectWithTag("Player").transform;
         currentState = State.Idle;
     }
@@ -47,6 +62,17 @@ public class EnemySlime : MonoBehaviour
 
     void Update()
     {
+        // Eğer oyuncu, NPC'nin "fleeRadius" içine girmişse ve NPC'nin durumu "Idle" ise
+        if (player != null && currentState == State.Flee)
+        {
+            float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+            if (distanceToPlayer > fleeRadius)
+            {
+                // NPC'nin "Flee" durumuna geç
+                currentState = State.Idle;
+            }
+        }
+        
         switch (currentState)
         {
             case State.Idle:
@@ -57,6 +83,9 @@ public class EnemySlime : MonoBehaviour
                 break;
             case State.Attack:
                 Attack();
+                break;
+            case State.Flee: // Flee durumu eklendi
+                Flee();
                 break;
             case State.Investigate:
                 Investigate();
@@ -115,11 +144,54 @@ public class EnemySlime : MonoBehaviour
 
         agent.SetDestination(player.position);
 
-        if (distanceToPlayer <= attackRange)
+        if (distanceToPlayer <= attackRange && !isAttacking)
         {
-            // Perform attack (placeholder for damage function)
+            ozController playerController = player.GetComponent<ozController>();
+            playerController.ScaleDown(damageValue);
+            isAttacking = true;
+            Invoke("ResetAttackState", 1f);
         }
 
+        FaceMovementDirection();
+    }
+
+    void ResetAttackState()
+    {
+        isAttacking = false;
+    }
+    
+    void OnCollisionEnter(Collision collision)
+    {
+        // Eğer çarpışan obje oyuncu ise ve NPC'nin şu anki durumu "Idle" ise
+        if (collision.gameObject.CompareTag("Player") && currentState != State.Flee)
+        {
+            // NPC'nin "Flee" durumuna geç
+            currentState = State.Flee;
+        }
+    }
+
+    void Flee()
+    {
+        if (player == null) return;
+
+        // Oyuncunun konumunu al
+        Vector3 playerPosition = player.position;
+
+        // NPC'nin bulunduğu konumdan oyuncunun konumunu çıkar ve bu kaçış yönü olarak belirlenir
+        Vector3 fleeDirection = transform.position - playerPosition;
+
+        // Yönü normalize et, sadece yönünü al, uzunluğu önemli değil
+        fleeDirection.Normalize();
+
+        // NPC'nin kaçma hızını ve kaçış yönünü kullanarak kaçma hareketini hesapla
+        Vector3 fleeMovement = fleeDirection * fleeSpeed * Time.deltaTime;
+
+        // NPC'nin konumuna kaçma hareketini uygula
+        transform.position += fleeMovement;
+
+        // NPC'nin dönüşü, kaçış yönünün tersine doğru yapılır
+        transform.rotation = Quaternion.LookRotation(-fleeDirection);
+        
         FaceMovementDirection();
     }
 
@@ -188,6 +260,26 @@ public class EnemySlime : MonoBehaviour
             {
                 if (hit.transform == player)
                 {
+                    // Oyuncunun boyut bilgisine erişim
+                    ozController playerController = player.GetComponent<ozController>();
+                    if (playerController != null)
+                    {
+                        // Burada oyuncunun boyutunu kullanabilirsiniz
+                        if (playerController.currentSize > attackableSize)
+                        {
+                            float playerSize = playerController.currentSize;
+                            Debug.Log("Player'ın boyutu: " + playerSize + ". KAÇ!");
+                            currentState = State.Flee; // NPC'nin boyutu 50'den büyükse flee durumuna geçer
+                            return false;
+                        }
+                        
+                        else if (playerController.currentSize <= attackableSize)
+                        {
+                            float playerSize = playerController.currentSize;
+                            Debug.Log("Player'ın boyutu: " + playerSize + ". SALDIR!");
+                        }
+                    }
+
                     playerInSight = true;
                     lastKnownPlayerPosition = player.position; // Update last known position
                     return true;
@@ -256,6 +348,10 @@ public class EnemySlime : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        // NPC'nin kaçma yarıçapını çiz
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position, fleeRadius);
+        
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
 

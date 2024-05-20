@@ -7,7 +7,8 @@
     <list default="true" id="0430a68f-cccc-4657-94e1-e4065d6504d6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.UMEZU/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UMEZU/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/EnemySlime.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/EnemySlime.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Oguz/OguzScene3.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Oguz/OguzScene3.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Oguz/ozController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Oguz/ozController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,8 +20,8 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Assets/Oguz/Shader/Cutout.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Oguz/Shader/VertexPainter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Oguz/ozController.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Oguz/ozControllerV2.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
@@ -101,7 +102,8 @@
       <workItem from="1716027051398" duration="10875000" />
       <workItem from="1716070497625" duration="4973000" />
       <workItem from="1716075728649" duration="2591000" />
-      <workItem from="1716119286565" duration="7758000" />
+      <workItem from="1716119286565" duration="27168000" />
+      <workItem from="1716163202581" duration="1223000" />
     </task>
     <servers />
   </component>
