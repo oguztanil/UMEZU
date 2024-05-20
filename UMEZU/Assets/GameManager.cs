@@ -18,6 +18,11 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+    [SerializeField] AudioSource blackHoleSound;
+    [SerializeField] AudioSource menuTheme;
+    [SerializeField] AudioSource gameTheme;
+    
+
     public bool timeStopped;
     public void StopTime()
     {
@@ -30,6 +35,8 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
     }
 
+    
+
     public void StartGame()
     {
         Sequence seq = DOTween.Sequence();
@@ -37,6 +44,8 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene("Level1");
         });
+
+        
 
     }
 
@@ -51,6 +60,8 @@ public class GameManager : MonoBehaviour
         loadSceneRoutine = StartCoroutine(LoadSceneRoutine(levelName));
         VfxManager.instance.LoadSceneEffect();
 
+       
+
     }
 
 
@@ -58,13 +69,18 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator LoadSceneRoutine(string nextLevelName)
     {
+        menuTheme.Stop();
+
         if (SceneManager.GetActiveScene().name != "MenuOnly")
         {
             //Immobile the player
             var playerSlime = GetPlayerSlime();
             playerSlime.SetImmovable(true);
         }
-        
+        if (blackHoleSound != null)
+        {
+            blackHoleSound.Play();
+        }
 
         // Start loading the next scene asynchronously
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(nextLevelName);
@@ -87,7 +103,13 @@ public class GameManager : MonoBehaviour
                 // Allow the scene to activate
                 asyncLoad.allowSceneActivation = true;
 
-                
+                if (SceneManager.GetActiveScene().name != "MenuOnly" && gameTheme.isPlaying == false)
+                {
+                    menuTheme.Stop();
+                    gameTheme.Play();
+                    Debug.Log("Game theme açmalýydý");
+                }
+
             }
             yield return null; // Continue waiting in the next frame
         }
@@ -131,6 +153,12 @@ public class GameManager : MonoBehaviour
         {
             LoadNextLevel("MenuOnly");
         }
+    }
+
+    public void SetMusicVolume(float value)
+    {
+        menuTheme.volume = value;
+        gameTheme.volume = value;
     }
 
 }
