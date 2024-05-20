@@ -72,6 +72,8 @@ public class EnemySlime : MonoBehaviour
         player = slimeController.transform;
         currentState = State.Idle;
 
+        AdjustScale();
+
     }
 
     public void InitializeEnemy()
@@ -122,7 +124,7 @@ public class EnemySlime : MonoBehaviour
     void Idle()
     {
         idleTimer += Time.deltaTime;
-        if (idleTimer >= idleTime)
+        if (idleTimer >= idleTime && !isFriendly)
         {
             idleTimer = 0f;
             currentState = State.Patrol;
