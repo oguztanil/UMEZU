@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] AudioSource blackHoleSound;
     [SerializeField] AudioSource menuTheme;
     [SerializeField] AudioSource gameTheme;
-    
+
 
     public bool timeStopped;
     public void StopTime()
@@ -69,8 +69,7 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator LoadSceneRoutine(string nextLevelName)
     {
-        menuTheme.Stop();
-
+       
         if (SceneManager.GetActiveScene().name != "MenuOnly")
         {
             //Immobile the player
@@ -103,12 +102,7 @@ public class GameManager : MonoBehaviour
                 // Allow the scene to activate
                 asyncLoad.allowSceneActivation = true;
 
-                if (SceneManager.GetActiveScene().name != "MenuOnly" && gameTheme.isPlaying == false)
-                {
-                    menuTheme.Stop();
-                    gameTheme.Play();
-                    Debug.Log("Game theme açmalýydý");
-                }
+        
 
             }
             yield return null; // Continue waiting in the next frame
@@ -155,10 +149,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SetMusicVolume(float value)
-    {
-        menuTheme.volume = value;
-        gameTheme.volume = value;
-    }
+
 
 }
