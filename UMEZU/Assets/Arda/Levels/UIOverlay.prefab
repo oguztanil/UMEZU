@@ -343,3 +343,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timerText: {fileID: 663907681872756422}
+  slimeColor: {r: 0.6117647, g: 0.87058824, b: 0.14509805, a: 1}
+  almostDyingColor: {r: 0.6886792, g: 0, b: 0, a: 1}
